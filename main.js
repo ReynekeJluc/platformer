@@ -5,6 +5,8 @@ cvs.width = 1200;
 cvs.height = 576;
 
 const gravity = 0.5;
+const jump = 20;
+const speedMH = 2;
 class Player {
 	constructor(position) {
 		this.position = position;
@@ -97,19 +99,19 @@ function animate() {
 
 	player.velocity.x = 0;
 
-	if(keys.d.pressed) player.velocity.x = 2;
-	if(keys.a.pressed) player.velocity.x = -2;
-	if(keys.w.pressed) player.velocity.y = -15;
-	if(keys.D.pressed) player.velocity.x = 2;
-	if(keys.A.pressed) player.velocity.x = -2;
-	if(keys.W.pressed) player.velocity.y = -15;
+	if(keys.d.pressed) player.velocity.x = speedMH;
+	if(keys.a.pressed) player.velocity.x = -speedMH;
+	if(keys.w.pressed) player.velocity.y = -jump;
+	if(keys.D.pressed) player.velocity.x = speedMH;
+	if(keys.A.pressed) player.velocity.x = -speedMH;
+	if(keys.W.pressed) player.velocity.y = -jump;
 
-	if(keys.в.pressed) player.velocity.x = 2;
-	if(keys.ф.pressed) player.velocity.x = -2;
-	if(keys.ц.pressed) player.velocity.y = -15;
-	if(keys.В.pressed) player.velocity.x = 2;
-	if(keys.Ф.pressed) player.velocity.x = -2;
-	if(keys.Ц.pressed) player.velocity.y = -15;
+	if(keys.в.pressed) player.velocity.x = speedMH;
+	if(keys.ф.pressed) player.velocity.x = -speedMH;
+	if(keys.ц.pressed) player.velocity.y = -jump;
+	if(keys.В.pressed) player.velocity.x = speedMH;
+	if(keys.Ф.pressed) player.velocity.x = -speedMH;
+	if(keys.Ц.pressed) player.velocity.y = -jump;
 }
 
 animate();
