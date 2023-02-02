@@ -4,49 +4,64 @@ const c = cvs.getContext('2d');
 cvs.width = 1200;
 cvs.height = 576;
 
+const scaledCvs = {
+	height: cvs.height / 4,
+	width: cvs.width / 4,
+};
+
 const gravity = 0.5;
 const jump = 20;
 const speedMH = 2;
-class Player {
-	constructor(position) {
-		this.position = position;
-		this.velocity = {
-			x: 0,
-			y: 1
-		};
-		this.height = 100;
-		this.width = 100;
-	}
-
-	draw() {
-		c.fillStyle = 'red';
-		c.fillRect(this.position.x, this.position.y, this.height, this.height);
-	}
-
-	update() {
-		this.draw();
-
-		this.position.x += this.velocity.x;
-		this.position.y += this.velocity.y;
-
-		if (this.position.y + this.height + this.velocity.y < cvs.height) {
-			this.velocity.y += gravity;
-		} else {
-			this.velocity.y = 0;
-		}
-
-		if (this.position.y + this.height + this.velocity.y < cvs.height - 15) {
-			keys.w.pressed = false;
-			keys.W.pressed = false;
-			keys.ц.pressed = false;
-			keys.Ц.pressed = false;
-		}
-	}
-}
 
 const player = new Player({
 	x: 0,
 	y: 0
+});
+
+const background = new Sprite({
+	position: {
+		x: 0,
+		y: 0,
+	},
+	imageSrc: './img/bg1.png',
+});
+
+const floorCollision2D = [];
+for(let i = 0; i < floorCollision.length; i += 30) {
+	floorCollision2D.push(floorCollision.slice(i, i + 30));
+}
+
+const collisionBlock = [];
+floorCollision2D.forEach((row, y) => {
+	row.forEach((symbol, x) => {
+		if(symbol === 794) {
+			collisionBlock.push(new CollisionBlock({
+				position: {
+					x: x * 16,
+					y: y * 16,
+				},
+		}));
+		}
+	});
+});
+
+const platformsCollision2D = [];
+for(let i = 0; i < platformsCollision.length; i += 30) {
+	platformsCollision2D.push(platformsCollision.slice(i, i + 30));
+}
+
+const platformsCollisionBlock = [];
+platformsCollision2D.forEach((row, y) => {
+	row.forEach((symbol, x) => {
+		if(symbol === 794) {
+			platformsCollisionBlock.push(new CollisionBlock({
+				position: {
+					x: x * 16,
+					y: y * 16,
+				},
+		}));
+		}
+	});
 });
 
 const keys = {
@@ -94,6 +109,21 @@ function animate() {
 
 	c.fillStyle = 'white';
 	c.fillRect(0, 0, cvs.width, cvs.height);
+
+	c.save();
+	c.scale(4, 4);
+	c.translate(0, -background.image.height + scaledCvs.height);
+	background.update();
+
+	collisionBlock.forEach(collisionBlock => {
+		collisionBlock.update();
+	});
+
+	platformsCollisionBlock.forEach(block => {
+		block.update();
+	});
+
+	c.restore();
 
 	player.update();
 
