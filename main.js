@@ -10,13 +10,8 @@ const scaledCvs = {
 };
 
 const gravity = 0.5;
-const jump = 20;
+const jump = 4;
 const speedMH = 2;
-
-const player = new Player({
-	x: 0,
-	y: 0
-});
 
 const background = new Sprite({
 	position: {
@@ -62,6 +57,14 @@ platformsCollision2D.forEach((row, y) => {
 		}));
 		}
 	});
+});
+
+const player = new Player({
+	position: {
+		x: 25,
+		y: 0
+	},
+	collisionBlock,
 });
 
 const keys = {
@@ -123,10 +126,7 @@ function animate() {
 		block.update();
 	});
 
-	c.restore();
-
 	player.update();
-
 	player.velocity.x = 0;
 
 	if(keys.d.pressed) player.velocity.x = speedMH;
@@ -142,6 +142,8 @@ function animate() {
 	if(keys.В.pressed) player.velocity.x = speedMH;
 	if(keys.Ф.pressed) player.velocity.x = -speedMH;
 	if(keys.Ц.pressed) player.velocity.y = -jump;
+
+	c.restore();
 }
 
 animate();
