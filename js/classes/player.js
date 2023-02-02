@@ -20,13 +20,6 @@ class Player {
 
 		this.position.x += this.velocity.x;
 
-		if (this.position.y + this.height + this.velocity.y < cvs.height - 350) {
-			keys.w.pressed = false;
-			keys.W.pressed = false;
-			keys.ц.pressed = false;
-			keys.Ц.pressed = false;
-		}
-
 		this.checkForHorizontalCollisions();
 		this.applyGravity();
 		this.checkForVerticalCollisions();
