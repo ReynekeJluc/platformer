@@ -1,8 +1,8 @@
 const cvs = document.querySelector('#canvas');
 const c = cvs.getContext('2d');
 
-cvs.width = 1200;
-cvs.height = 576;
+cvs.width = 1280;
+cvs.height = 600;
 
 const scaledCvs = {
 	height: cvs.height / 4,
@@ -65,6 +65,8 @@ const player = new Player({
 		y: 0
 	},
 	collisionBlock,
+	imageSrc: 'img/character/Idle.png',
+	frameRate: 7,
 });
 
 const keys = {
