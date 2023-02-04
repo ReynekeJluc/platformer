@@ -66,11 +66,11 @@ const player = new Player({
 	},
 	collisionBlock,
 	imageSrc: 'img/character/Idle.png',
-	frameRate: 7,
+	frameRate: 8,
 	animations: {
 		Idle:  {
 			imageSrc: 'img/character/Idle.png',
-			frameRate: 7,
+			frameRate: 8,
 			frameBuffer: 8,
 		},
 		Run:  {
@@ -80,7 +80,7 @@ const player = new Player({
 		},
 		Jump:  {
 			imageSrc: 'img/character/Jump.png',
-			frameRate: 8,
+			frameRate: 2,
 			frameBuffer: 3,
 		},
 	}
@@ -156,6 +156,10 @@ function animate() {
 	else if(keys.w.pressed || keys.W.pressed || keys.ц.pressed || keys.Ц.pressed) player.velocity.y = -jump;
 
 	if(player.velocity.x === 0) player.switchSprite('Idle');
+
+	if(player.velocity.y < 0) {
+		player.switchSprite('Jump');
+	}
 
 	c.restore();
 }
