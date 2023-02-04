@@ -61,8 +61,8 @@ platformsCollision2D.forEach((row, y) => {
 
 const player = new Player({
 	position: {
-		x: 25,
-		y: 0
+		x: 50,
+		y: 120
 	},
 	collisionBlock,
 	imageSrc: 'img/character/Idle.png',
