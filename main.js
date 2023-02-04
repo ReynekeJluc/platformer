@@ -67,6 +67,23 @@ const player = new Player({
 	collisionBlock,
 	imageSrc: 'img/character/Idle.png',
 	frameRate: 7,
+	animations: {
+		Idle:  {
+			imageSrc: 'img/character/Idle.png',
+			frameRate: 7,
+			frameBuffer: 8,
+		},
+		Run:  {
+			imageSrc: 'img/character/Run.png',
+			frameRate: 8,
+			frameBuffer: 5,
+		},
+		Jump:  {
+			imageSrc: 'img/character/Jump.png',
+			frameRate: 8,
+			frameBuffer: 3,
+		},
+	}
 });
 
 const keys = {
@@ -131,19 +148,14 @@ function animate() {
 	player.update();
 	player.velocity.x = 0;
 
-	if(keys.d.pressed) player.velocity.x = speedMH;
-	if(keys.a.pressed) player.velocity.x = -speedMH;
-	if(keys.w.pressed) player.velocity.y = -jump;
-	if(keys.D.pressed) player.velocity.x = speedMH;
-	if(keys.A.pressed) player.velocity.x = -speedMH;
-	if(keys.W.pressed) player.velocity.y = -jump;
+	if(keys.d.pressed || keys.D.pressed || keys.в.pressed || keys.В.pressed) {
+		player.switchSprite('Run');
+		player.velocity.x = speedMH;
+	} 
+	else if(keys.a.pressed || keys.A.pressed || keys.ф.pressed || keys.Ф.pressed) player.velocity.x = -speedMH;
+	else if(keys.w.pressed || keys.W.pressed || keys.ц.pressed || keys.Ц.pressed) player.velocity.y = -jump;
 
-	if(keys.в.pressed) player.velocity.x = speedMH;
-	if(keys.ф.pressed) player.velocity.x = -speedMH;
-	if(keys.ц.pressed) player.velocity.y = -jump;
-	if(keys.В.pressed) player.velocity.x = speedMH;
-	if(keys.Ф.pressed) player.velocity.x = -speedMH;
-	if(keys.Ц.pressed) player.velocity.y = -jump;
+	if(player.velocity.x === 0) player.switchSprite('Idle');
 
 	c.restore();
 }
