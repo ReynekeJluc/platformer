@@ -11,6 +11,7 @@ const scaledCvs = {
 
 const gravity = 0.5;
 const jump = 4;
+const borderJump = 13;
 const speedMH = 2;
 
 const background = new Sprite({
@@ -68,18 +69,43 @@ const player = new Player({
 	imageSrc: 'img/character/Idle.png',
 	frameRate: 8,
 	animations: {
-		Idle:  {
+		Idle: {
 			imageSrc: 'img/character/Idle.png',
 			frameRate: 8,
 			frameBuffer: 8,
 		},
-		Run:  {
+		IdleLeft: {
+			imageSrc: 'img/character/IdleLeft.png',
+			frameRate: 8,
+			frameBuffer: 8,
+		},
+		Run: {
 			imageSrc: 'img/character/Run.png',
 			frameRate: 8,
 			frameBuffer: 5,
 		},
-		Jump:  {
+		RunLeft: {
+			imageSrc: 'img/character/RunLeft.png',
+			frameRate: 8,
+			frameBuffer: 5,
+		},
+		Jump: {
 			imageSrc: 'img/character/Jump.png',
+			frameRate: 2,
+			frameBuffer: 3,
+		},
+		JumpLeft: {
+			imageSrc: 'img/character/JumpLeft.png',
+			frameRate: 2,
+			frameBuffer: 3,
+		},
+		Fall:  {
+			imageSrc: 'img/character/Fall.png',
+			frameRate: 2,
+			frameBuffer: 3,
+		},
+		FallLeft:  {
+			imageSrc: 'img/character/FallLeft.png',
 			frameRate: 2,
 			frameBuffer: 3,
 		},
@@ -151,14 +177,38 @@ function animate() {
 	if(keys.d.pressed || keys.D.pressed || keys.в.pressed || keys.В.pressed) {
 		player.switchSprite('Run');
 		player.velocity.x = speedMH;
+		player.lastDirection = 'right';
 	} 
-	else if(keys.a.pressed || keys.A.pressed || keys.ф.pressed || keys.Ф.pressed) player.velocity.x = -speedMH;
-	else if(keys.w.pressed || keys.W.pressed || keys.ц.pressed || keys.Ц.pressed) player.velocity.y = -jump;
+	else if(keys.a.pressed || keys.A.pressed || keys.ф.pressed || keys.Ф.pressed) {
+		player.switchSprite('RunLeft');
+		player.velocity.x = -speedMH;
+		player.lastDirection = 'left';
+	}
+	else if(keys.w.pressed || keys.W.pressed || keys.ц.pressed || keys.Ц.pressed) {
+			player.velocity.y = -jump;
+	}
 
-	if(player.velocity.x === 0) player.switchSprite('Idle');
+	if(player.velocity.x === 0) {
+		if (player.lastDirection == 'right') player.switchSprite('Idle');
+		else player.switchSprite('IdleLeft');
+	} 
 
 	if(player.velocity.y < 0) {
-		player.switchSprite('Jump');
+		player.check += 1; 
+		if (player.lastDirection == 'right') 
+			player.switchSprite('Jump');
+		else player.switchSprite('JumpLeft');
+	} else if (player.velocity.y > 0) {
+		if (player.lastDirection == 'right') 
+			player.switchSprite('Fall');
+		else player.switchSprite('FallLeft');
+	}
+
+	if (player.check > borderJump) {
+		keys.w.pressed = false; 
+		keys.W.pressed = false;
+		keys.ц.pressed = false;
+		keys.Ц.pressed = false;
 	}
 
 	c.restore();
@@ -174,36 +224,40 @@ document.addEventListener('keydown', (e) => {
 		case 'D': 
 			keys.D.pressed = true;
 			break;
+
 		case 'a': 
 			keys.a.pressed = true;
 			break;
 		case 'A': 
 			keys.A.pressed = true;
 			break;
+
 		case 'w': 
-			keys.w.pressed = true;
+			if (player.check === -1) keys.w.pressed = true;
 			break;
 		case 'W': 
-			keys.W.pressed = true;
+			if (player.check === -1) keys.w.pressed = true;
 			break;
-			
+
 		case 'в': 
 			keys.в.pressed = true;
 			break;
 		case 'В': 
 			keys.В.pressed = true;
 			break;
+
 		case 'ф': 
 			keys.ф.pressed = true;
 			break;
 		case 'Ф': 
 			keys.Ф.pressed = true;
 			break;
+
 		case 'ц': 
-			keys.ц.pressed = true;
+			if (player.check === -1) keys.w.pressed = true;
 			break;
 		case 'Ц': 
-			keys.Ц.pressed = true;
+			if (player.check === -1) keys.w.pressed = true;	
 			break;
 	}
 });
@@ -216,12 +270,14 @@ document.addEventListener('keyup', (e) => {
 		case 'D': 
 			keys.D.pressed = false;
 			break;
+			
 		case 'a': 
 			keys.a.pressed = false;
 			break;
 		case 'A': 
 			keys.A.pressed = false;
 			break;
+
 		case 'w': 
 			keys.w.pressed = false;
 			break;
@@ -235,12 +291,14 @@ document.addEventListener('keyup', (e) => {
 		case 'В': 
 			keys.В.pressed = false;
 			break;
+
 		case 'ф': 
 			keys.ф.pressed = false;
 			break;
 		case 'Ф': 
 			keys.Ф.pressed = false;
 			break;
+
 		case 'ц': 
 			keys.ц.pressed = false;
 			break;

@@ -1,10 +1,11 @@
 class Player extends  Sprite {
 	constructor({position, collisionBlock, imageSrc, frameRate, scale = 0.7, animations}) {
 		super({imageSrc, frameRate, scale});
+		this.check = 0;
 		this.position = position;
 		this.velocity = {
 			x: 0,
-			y: 1
+			y: 1,
 		};
 		this.collisionBlock = collisionBlock;
 		this.hitbox = {
@@ -17,6 +18,7 @@ class Player extends  Sprite {
 		};
 
 		this.animations = animations;
+		this.lastDirection = 'right';
 
 		for (let key in this.animations) {
 			const image = new Image();
@@ -25,9 +27,9 @@ class Player extends  Sprite {
 			this.animations[key].image = image;	
 		}
 	}
-	
+
 	switchSprite(key) {
-		if (this.image === this.animations[key].image) return;
+		if (this.image === this.animations[key].image || !this.loaded) return;
 		this.image = this.animations[key].image;
 		this.frameBuffer = this.animations[key].frameBuffer;
 		this.frameRate = this.animations[key].frameRate;
@@ -37,16 +39,17 @@ class Player extends  Sprite {
 		this.updateFrames();
 		this.updateHitbox();
 
-		c.fillStyle = 'rgba(0, 255, 0, 0.2)';
-		c.fillRect(this.position.x, this.position.y, this.width, this.height);
+		//Показ хитбокса и бокса анимации
+		// c.fillStyle = 'rgba(0, 255, 0, 0.2)';
+		// c.fillRect(this.position.x, this.position.y, this.width, this.height);
 
-		c.fillStyle = 'rgba(255, 0, 0, 0.2)';
-		c.fillRect(
-			this.hitbox.position.x, 
-			this.hitbox.position.y, 
-			this.hitbox.width, 
-			this.hitbox.height
-		);
+		// c.fillStyle = 'rgba(255, 0, 0, 0.2)';
+		// c.fillRect(
+		// 	this.hitbox.position.x, 
+		// 	this.hitbox.position.y, 
+		// 	this.hitbox.width, 
+		// 	this.hitbox.height
+		// );
 
 		this.draw();
 
@@ -71,14 +74,13 @@ class Player extends  Sprite {
 	}
 
 	applyGravity() {
-		this.position.y += this.velocity.y;
 		this.velocity.y += gravity;
+		this.position.y += this.velocity.y;
 	}
 
 	checkForHorizontalCollisions() {
 		for (let i = 0; i < this.collisionBlock.length; i++) {
 			const collisionBlocks = this.collisionBlock[i];
-
 			if(
 				collision({
 					obj1: this.hitbox,
@@ -108,26 +110,24 @@ class Player extends  Sprite {
 	checkForVerticalCollisions() {
 		for (let i = 0; i < this.collisionBlock.length; i++) {
 			const collisionBlocks = this.collisionBlock[i];
-
-			if(
+			if (
 				collision({
 					obj1: this.hitbox,
 					obj2: collisionBlocks,
 				})
 			) {
-				if(this.velocity.y > 0) {
+				this.check = -1;
+				if (this.velocity.y > 0) {
 					this.velocity.y = 0;
-
 					const offset = this.hitbox.position.y - this.position.y + this.hitbox.height;
 
 					this.position.y = collisionBlocks.position.y - offset - 0.01;
 					break;
 				}
-				if(this.velocity.y < 0) {
+				if (this.velocity.y < 0) {
 					this.velocity.y = 0;
-
 					const offset = this.hitbox.position.y - this.position.y;
-
+					
 					this.position.y = collisionBlocks.position.y + collisionBlocks.height - offset + 0.01;
 					break;
 				}
