@@ -144,10 +144,12 @@ class Player extends  Sprite {
 			}
 		}
 
+
+		// Для платформ
 		for (let i = 0; i < this.platformCollisionBlocks.length; i++) {
 			const platformCollisionBlock = this.platformCollisionBlocks[i];
 			if (
-				collision({
+				platformCollision({
 					obj1: this.hitbox,
 					obj2: platformCollisionBlock,
 				})
@@ -159,14 +161,7 @@ class Player extends  Sprite {
 
 					this.position.y = platformCollisionBlock.position.y - offset - 0.01;
 					break;
-				}
-				if (this.velocity.y < 0) {
-					this.velocity.y = 0;
-					const offset = this.hitbox.position.y - this.position.y;
-					
-					this.position.y = platformCollisionBlock.position.y + platformCollisionBlock.height - offset + 0.01;
-					break;
-				}
+				} 
 			}
 		}
 	}

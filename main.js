@@ -9,7 +9,7 @@ const scaledCvs = {
 	width: cvs.width / 4,
 };
 
-const gravity = 0.5;
+const gravity = 0.3;
 const jump = 4;
 const borderJump = 13;
 const speedMH = 2;
@@ -55,6 +55,7 @@ platformsCollision2D.forEach((row, y) => {
 					x: x * 16,
 					y: y * 16,
 				},
+				height: 4,
 		}));
 		}
 	});
