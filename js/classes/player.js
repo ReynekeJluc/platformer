@@ -35,6 +35,15 @@ class Player extends  Sprite {
 
 			this.animations[key].image = image;	
 		}
+
+		this.camerabox = {
+			position: {
+				x: this.position.x,
+				y: this.position.y,
+			},
+			width: 200,
+			height: 100,
+		};
 	}
 
 	switchSprite(key) {
@@ -45,14 +54,79 @@ class Player extends  Sprite {
 		this.frameRate = this.animations[key].frameRate;
 	}
 
+	updateCamerabox() {
+		this.camerabox = {
+			position: {
+				x: this.position.x - 45,
+				y: this.position.y,
+			},
+			width: 200,
+			height: 100,
+		};
+	}
+
+	checkForHorizontalCanvasCollision() {
+		if (this.hitbox.position.x + this.hitbox.width + this.velocity.x >= 480 ||
+			this.hitbox.position.x + this.velocity.x <= 0) this.velocity.x = 0;
+	}
+
+	shouldPanCameraToTheLeft( {cvs, camera} ) {
+		const cameraboxRightSide = this.camerabox.position.x + this.camerabox.width;
+		const scaledCvsWidth = cvs.width / 4;
+		
+		if (cameraboxRightSide > 480) return;
+
+		if (cameraboxRightSide >= scaledCvsWidth + Math.abs(camera.position.x)) {
+			camera.position.x -= this.velocity.x;
+		}
+	}
+
+	shouldPanCameraToTheRight( {cvs, camera} ) {
+		if (this.camerabox.position.x <= 0) return;
+
+		if (this.camerabox.position.x <= Math.abs(camera.position.x)) {
+			camera.position.x -= this.velocity.x;
+		}
+	}
+
+	shouldPanCameraDown( {cvs, camera} ) {
+		if (this.camerabox.position.y + this.velocity.y <= 0) return;
+		if (this.camerabox.position.y <= Math.abs(camera.position.y)) {
+			camera.position.y -= this.velocity.y;
+		}
+	}
+
+	shouldPanCameraUp( {cvs, camera} ) { 
+		if (this.camerabox.position.y + this.camerabox.height + this.velocity.y >= 320) return;
+
+		const scaledCvsHeight = cvs.height / 4;
+		
+
+		if (this.camerabox.position.y + this.camerabox.height >= Math.abs(camera.position.y) + scaledCvsHeight) {
+			camera.position.y -= this.velocity.y;
+		}
+	}
+
 	update() {
 		this.updateFrames();
 		this.updateHitbox();
+		this.updateCamerabox();
 
-		//Показ хитбокса и бокса анимации
+
+		// Show CameraBox
+		// c.fillStyle = 'rgba(0, 0, 255, 0.2)';
+		// c.fillRect(
+		// 	this.camerabox.position.x, 
+		// 	this.camerabox.position.y, 
+		// 	this.camerabox.width, 
+		// 	this.camerabox.height
+		// );
+
+
+		// Show hitbox and animation box
+
 		// c.fillStyle = 'rgba(0, 255, 0, 0.2)';
 		// c.fillRect(this.position.x, this.position.y, this.width, this.height);
-
 		// c.fillStyle = 'rgba(255, 0, 0, 0.2)';
 		// c.fillRect(
 		// 	this.hitbox.position.x, 
@@ -60,6 +134,7 @@ class Player extends  Sprite {
 		// 	this.hitbox.width, 
 		// 	this.hitbox.height
 		// );
+
 
 		this.draw();
 
@@ -75,17 +150,21 @@ class Player extends  Sprite {
 	updateHitbox() {
 		this.hitbox = {
 			position: {
-				x: this.position.x + 43,
+				x: this.position.x + 46,
 				y: this.position.y + 38,
 			},
-			width: 22,
+			width: 10,
 			height: 30,
 		};
 	}
 
 	applyGravity() {
-		this.velocity.y += gravity;
-		this.position.y += this.velocity.y;
+		if (this.velocity.y < 4) {
+			this.velocity.y += gravity;
+			this.position.y += this.velocity.y;
+		} else {
+			this.position.y += this.velocity.y;
+		}
 	}
 
 	checkForHorizontalCollisions() {
