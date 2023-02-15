@@ -5,8 +5,8 @@ cvs.width = 1280;
 cvs.height = 600;
 
 const scaledCvs = {
-	height: cvs.height / 4,
-	width: cvs.width / 4,
+	height: cvs.height / 3,
+	width: cvs.width / 3,
 };
 
 const gravity = 0.3;
@@ -163,13 +163,16 @@ const camera = {
 	},
 };
 
+function soundClick() {
+	let audio = new Audio(); 
+	audio.src = './music/bg_music.mp3'; 
+	audio.autoplay = true; 
+}
+
 function animate() {
 	requestAnimationFrame(animate);
-	
-	console.log(player.velocity.y);
-
 	c.fillStyle = 'white';
-	c.fillRect(0, 0, cvs.width, cvs.height);
+	c.fillRect(0, 0, cvs.width, cvs.height); 
 
 	c.save();
 	c.scale(4, 4);  
@@ -188,21 +191,21 @@ function animate() {
 	player.update();
 	player.velocity.x = 0;
 
-	if(keys.d.pressed || keys.D.pressed || keys.в.pressed || keys.В.pressed) {
+	if (keys.d.pressed || keys.D.pressed || keys.в.pressed || keys.В.pressed) {
 		player.switchSprite('Run');
 		player.velocity.x = speedMH;
 		player.lastDirection = 'right';
 
 		player.shouldPanCameraToTheLeft({cvs, camera});
 	} 
-	else if(keys.a.pressed || keys.A.pressed || keys.ф.pressed || keys.Ф.pressed) {
+	if (keys.a.pressed || keys.A.pressed || keys.ф.pressed || keys.Ф.pressed) {
 		player.switchSprite('RunLeft');
 		player.velocity.x = -speedMH;
 		player.lastDirection = 'left';
 
 		player.shouldPanCameraToTheRight({cvs, camera});
 	}
-	else if(keys.w.pressed || keys.W.pressed || keys.ц.pressed || keys.Ц.pressed) { 
+	if (keys.w.pressed || keys.W.pressed || keys.ц.pressed || keys.Ц.pressed) { 
 		if (player.velocity.y < 5) {
 			player.velocity.y = -jump;
 		}
@@ -329,4 +332,3 @@ document.addEventListener('keyup', (e) => {
 			break;
 	}
 });
-
