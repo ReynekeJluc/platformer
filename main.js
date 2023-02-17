@@ -167,7 +167,7 @@ function soundBgMusic() {
 	let audio = new Audio();
 	audio.src = './music/bg_music.mp3';
 	audio.autoplay = true;
-	audio.volume = 0.65;
+	audio.volume = 0.5;
 }
 
 let triggerMusic = 0;
