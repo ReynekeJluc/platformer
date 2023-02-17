@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" href="style.css">
 	<title>Platformer</title>
 </head>
@@ -11,7 +12,9 @@
 		
 		<canvas id = "canvas"></canvas>
 
-		<audio src="./music/bg_music.mp3" autoplay ="autoplay"></audio>
+		<audio src="./music/walk.mp3" id = "step"></audio>
+		<audio src="./music/jumping.mp3" id = "jump"></audio>
+		<audio src="./music/fall.mp3" id = "fall"></audio>
 		<script src="./js/utils.js"></script>
 		<script src="./js/classes/collisionFloor.js"></script>
 		<script src="./js/classes/sprite.js"></script>

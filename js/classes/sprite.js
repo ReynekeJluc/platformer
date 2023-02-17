@@ -10,7 +10,7 @@ class Sprite {
 			this.loaded = true;
 		};
 		this.image.src = imageSrc;
-		this.frameRate = frameRate;
+		this.frameRate = frameRate; 
 		this.currentFrame = 0;
 		this.frameBuffer = frameBuffer;
 		this.elapsedFrames = 0;

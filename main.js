@@ -55,7 +55,7 @@ platformsCollision2D.forEach((row, y) => {
 					x: x * 16,
 					y: y * 16,
 				},
-				height: 4,
+				height: 6,
 		}));
 		}
 	});
@@ -163,11 +163,18 @@ const camera = {
 	},
 };
 
-function soundClick() {
-	let audio = new Audio(); 
-	audio.src = './music/bg_music.mp3'; 
-	audio.autoplay = true; 
+function soundBgMusic() {
+	let audio = new Audio();
+	audio.src = './music/bg_music.mp3';
+	audio.autoplay = true;
+	audio.volume = 0.65;
 }
+
+let triggerMusic = 0;
+
+steps = document.querySelector('#step');
+jumping = document.querySelector('#jump');
+falling = document.querySelector('#fall');
 
 function animate() {
 	requestAnimationFrame(animate);
@@ -197,6 +204,14 @@ function animate() {
 		player.lastDirection = 'right';
 
 		player.shouldPanCameraToTheLeft({cvs, camera});
+
+		if (triggerMusic == 0) {
+			soundBgMusic();
+			triggerMusic = 1;
+		} 
+		
+		steps.volume = 0.3;
+		steps.play();
 	} 
 	if (keys.a.pressed || keys.A.pressed || keys.ф.pressed || keys.Ф.pressed) {
 		player.switchSprite('RunLeft');
@@ -204,17 +219,41 @@ function animate() {
 		player.lastDirection = 'left';
 
 		player.shouldPanCameraToTheRight({cvs, camera});
+		if (triggerMusic == 0) {
+			soundBgMusic();
+			triggerMusic = 1;
+		}
+
+		steps.volume = 0.3;
+		steps.play();
 	}
 	if (keys.w.pressed || keys.W.pressed || keys.ц.pressed || keys.Ц.pressed) { 
 		if (player.velocity.y < 5) {
 			player.velocity.y = -jump;
+
+			jumping.volume = 0.4;
+			jumping.play();
+		}
+
+		if (triggerMusic == 0) {
+			soundBgMusic();
+			triggerMusic = 1;
 		}
 	}
 
 	if(player.velocity.x === 0) {
-		if (player.lastDirection == 'right') player.switchSprite('Idle');
-		else player.switchSprite('IdleLeft');
+		steps.pause();
+		if (player.lastDirection == 'right') {
+			player.switchSprite('Idle');
+		}
+		else {
+			player.switchSprite('IdleLeft');
+		}
 	} 
+
+	if (player.check != -1) {
+		steps.pause();
+	}
 
 	if(player.velocity.y < 0) {
 		player.shouldPanCameraDown({camera, cvs});
@@ -224,8 +263,9 @@ function animate() {
 		else player.switchSprite('JumpLeft');
 	} else if (player.velocity.y > 0) {
 		player.shouldPanCameraUp({camera, cvs});
-		if (player.lastDirection == 'right') 
+		if (player.lastDirection == 'right') {
 			player.switchSprite('Fall');
+		}
 		else player.switchSprite('FallLeft');
 	}
 
@@ -234,6 +274,9 @@ function animate() {
 		keys.W.pressed = false;
 		keys.ц.pressed = false;
 		keys.Ц.pressed = false;
+
+		falling.volume = 0.2;
+		falling.play();
 	}
 
 	c.restore();
