@@ -210,7 +210,7 @@ function animate() {
 			triggerMusic = 1;
 		} 
 		
-		steps.volume = 0.3;
+		steps.volume = 0.1;
 		steps.play();
 	} 
 	if (keys.a.pressed || keys.A.pressed || keys.ф.pressed || keys.Ф.pressed) {
@@ -224,7 +224,7 @@ function animate() {
 			triggerMusic = 1;
 		}
 
-		steps.volume = 0.3;
+		steps.volume = 0.1;
 		steps.play();
 	}
 	if (keys.w.pressed || keys.W.pressed || keys.ц.pressed || keys.Ц.pressed) { 
